@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VietFair - Tourist Honest Price Guide & Photo Discovery</title>
+    <!-- Favicon / Tab Icon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇻🇳</text></svg>">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        viet: {
+                            emerald: '#059669',
+                            teal: '#0D9488',
+                            terracotta: '#C2410C',
+                            amber: '#D97706',
+                            rose: '#E11D48',
+                            sand: '#FDFBF7',
+                            dark: '#0F172A'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8FAFC;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .img-card-zoom {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-container:hover .img-card-zoom {
+            transform: scale(1.06);
+        }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(14px);
+        }
+    </style>
+</head>
+<body class="text-slate-800 bg-slate-50 min-h-screen flex flex-col antialiased">
+
+    <!-- Top Rate Bar -->
+    <div class="bg-gradient-to-r from-emerald-800 via-teal-700 to-amber-700 text-white text-xs md:text-sm py-2 px-4 text-center font-medium shadow-inner flex flex-wrap items-center justify-center gap-2">
+        <span>🇻🇳 Real-life Tourist Fair Price Benchmarks & Authentic Photography across Vietnam.</span>
+        <div class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-xs font-semibold">
+            <span>💱 Live Rates: 1 USD ≈ 25,400 ₫</span>
+        </div>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="sticky top-0 z-40 glass-header border-b border-slate-200/90 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('catalog')">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center text-white font-black text-xl shadow-md shadow-emerald-200">
+                        🇻🇳
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-700 via-teal-700 to-amber-700">VietFair</span>
+                        <span class="text-[10px] block font-bold text-amber-700 uppercase tracking-widest -mt-1">Honest Tourist Guide</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center space-x-1 font-medium text-sm">
+                    <button onclick="switchTab('catalog')" id="nav-catalog" class="px-3.5 py-2 rounded-xl text-emerald-800 bg-emerald-50 font-bold transition-all">
+                        <i class="ph ph-image font-bold mr-1.5"></i> Photo Price Guide
+                    </button>
+                    <button onclick="switchTab('spots')" id="nav-spots" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-emerald-700 hover:bg-slate-100 transition-all">
+                        <i class="ph ph-map-pin mr-1.5"></i> Regional Guides
+                    </button>
+                    <button onclick="switchTab('checker')" id="nav-checker" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-emerald-700 hover:bg-slate-100 transition-all">
+                        <i class="ph ph-calculator mr-1.5"></i> Haggle Helper
+                    </button>
+                    <button onclick="switchTab('phrases')" id="nav-phrases" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-emerald-700 hover:bg-slate-100 transition-all">
+                        <i class="ph ph-chat-teardrop-text mr-1.5"></i> Speech Flashcards
+                    </button>
+                    <button onclick="switchTab('tips')" id="nav-tips" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-emerald-700 hover:bg-slate-100 transition-all">
+                        <i class="ph ph-shield-check mr-1.5"></i> Vendor Tips
+                    </button>
+                </nav>
+
+                <!-- Saved List Drawer Button -->
+                <div class="flex items-center gap-2">
+                    <button onclick="switchTab('saved')" id="nav-saved" class="relative inline-flex items-center gap-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200/90 px-3.5 py-2 rounded-xl font-bold text-sm transition-all shadow-sm">
+                        <i class="ph ph-bookmark-simple text-amber-600 text-base"></i>
+                        <span class="hidden sm:inline">Checklist</span>
+                        <span id="saved-badge" class="bg-amber-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero-section" class="bg-gradient-to-br from-emerald-900 via-teal-800 to-amber-900 text-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-black/20"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 relative z-10">
+            <div class="max-w-3xl">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-semibold mb-3 border border-white/20">
+                    <i class="ph ph-sparkle text-amber-300"></i> Real Photo Gallery & Tourist Price Verification
+                </span>
+                <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight">
+                    Know the Fair Price Before You Buy!
+                </h1>
+                <p class="mt-2 text-base md:text-lg text-emerald-100/90 leading-relaxed font-medium">
+                    Explore real photos of food, taxis, crafts, and tours with local fair price ranges across Hanoi, Ha Long, Sa Pa, Hoi An, Hue & Saigon.
+                </p>
+
+                <!-- Search & Filters Bar -->
+                <div class="mt-6 bg-white rounded-2xl p-2.5 sm:p-3 shadow-2xl text-slate-800 flex flex-col md:flex-row gap-2">
+                    <div class="relative flex-grow">
+                        <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <input type="text" id="search-input" onkeyup="filterItems()" placeholder="Search Pho, Banh Mi, Egg Coffee, Cyclo, Ao Dai, SIM..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm md:text-base font-medium">
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <!-- Location Filter -->
+                        <select id="location-select" onchange="filterItems()" class="bg-slate-100 border border-slate-200 text-slate-800 py-2.5 px-3 rounded-xl text-sm font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <option value="all">📍 All 10 Destinations</option>
+                            <option value="hanoi">Hanoi Old Quarter</option>
+                            <option value="halong">Ha Long Bay</option>
+                            <option value="haiphong">Hai Phong</option>
+                            <option value="sapa">Sa Pa</option>
+                            <option value="ninhbinh">Ninh Binh</option>
+                            <option value="hue">Hue Ancient City</option>
+                            <option value="danang">Da Nang</option>
+                            <option value="hoian">Hoi An</option>
+                            <option value="nhatrang">Nha Trang</option>
+                            <option value="hcmc">Ho Chi Minh City</option>
+                        </select>
+
+                        <!-- Currency Selector -->
+                        <select id="currency-select" onchange="changeCurrency()" class="bg-slate-100 border border-slate-200 text-slate-800 py-2.5 px-3 rounded-xl text-sm font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <option value="USD">🇺🇸 USD ($)</option>
+                            <option value="EUR">🇪🇺 EUR (€)</option>
+                            <option value="AUD">🇦🇺 AUD ($)</option>
+                            <option value="GBP">🇬🇧 GBP (£)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- TAB 1: REAL PHOTO PRODUCT CATALOG -->
+        <section id="tab-catalog" class="tab-content space-y-6">
+            <!-- Category Chips -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 hide-scrollbar">
+                <button onclick="setCategory('all')" class="cat-btn active flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap border bg-emerald-600 text-white border-emerald-600 shadow-sm" data-cat="all">
+                    <i class="ph ph-grid-four"></i> All Items
+                </button>
+                <button onclick="setCategory('food')" class="cat-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap border bg-white text-slate-600 border-slate-200 hover:bg-slate-100" data-cat="food">
+                    🍲 Dishes & Drinks
+                </button>
+                <button onclick="setCategory('tours')" class="cat-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap border bg-white text-slate-600 border-slate-200 hover:bg-slate-100" data-cat="tours">
+                    ⛵ Tours & Cruises
+                </button>
+                <button onclick="setCategory('souvenir')" class="cat-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap border bg-white text-slate-600 border-slate-200 hover:bg-slate-100" data-cat="souvenir">
+                    👒 Crafts & Clothing
+                </button>
+                <button onclick="setCategory('transport')" class="cat-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap border bg-white text-slate-600 border-slate-200 hover:bg-slate-100" data-cat="transport">
+                    🛵 Rides & Taxis
+                </button>
+                <button onclick="setCategory('essential')" class="cat-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap border bg-white text-slate-600 border-slate-200 hover:bg-slate-100" data-cat="essential">
+                    📱 SIM & Travel Gear
+                </button>
+            </div>
+
+            <!-- Real Image Product Grid -->
+            <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamically Rendered with Real Photos -->
+            </div>
+
+            <div id="no-results" class="hidden text-center py-12 bg-white rounded-3xl border border-dashed border-slate-300 p-8">
+                <div class="text-4xl mb-3">🔍</div>
+                <h3 class="text-lg font-bold text-slate-800">No photo items match your query</h3>
+                <p class="text-slate-500 text-sm mt-1">Try switching categories or searching for keywords like "Coffee", "Noodles", or "Ao Dai".</p>
+            </div>
+        </section>
+
+        <!-- TAB 2: REGIONAL GUIDES -->
+        <section id="tab-spots" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200/90 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+                    <div>
+                        <span class="text-xs uppercase font-extrabold text-emerald-600 tracking-wider">Destination Photo Guides</span>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-800 mt-0.5">Regional Market & Tourist Spot Guides</h2>
+                        <p class="text-slate-600 text-sm mt-1">
+                            Specific pricing customs, seafood weighing guidelines, and local advice for 10 major destinations.
+                        </p>
+                    </div>
+
+                    <div>
+                        <select id="spot-filter-select" onchange="renderSpotGuides()" class="bg-emerald-50 border border-emerald-200 text-emerald-900 font-bold py-2.5 px-4 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <option value="all">🌐 Show All 10 Destinations</option>
+                            <option value="hanoi">🏛️ Hanoi Old Quarter</option>
+                            <option value="halong">🚤 Ha Long Bay</option>
+                            <option value="sapa">🏔️ Sa Pa</option>
+                            <option value="haiphong">🍜 Hai Phong</option>
+                            <option value="hue">🏯 Hue Imperial City</option>
+                            <option value="danang">🌉 Da Nang</option>
+                            <option value="hoian">🏮 Hoi An</option>
+                            <option value="ninhbinh">🛶 Ninh Binh</option>
+                            <option value="nhatrang">🏖️ Nha Trang</option>
+                            <option value="hcmc">🏙️ Ho Chi Minh City</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="spots-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <!-- Populated JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: PRICE EVALUATOR / HAGGLE HELPER -->
+        <section id="tab-checker" class="tab-content hidden space-y-6">
+            <div class="bg-gradient-to-br from-emerald-900 to-teal-900 text-white rounded-3xl p-6 md:p-8 shadow-xl">
+                <div class="max-w-2xl">
+                    <span class="inline-block bg-emerald-700/80 text-emerald-200 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-2">Real-Time Quote Verification</span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold">Haggle & Deal Evaluator</h2>
+                    <p class="text-emerald-100 text-sm md:text-base mt-2">
+                        Quoted a price by a street hawker or driver? Choose an item below to verify whether it's fair or get a polite Vietnamese counter-offer!
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div class="lg:col-span-6 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-5">
+                    <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
+                        <i class="ph ph-calculator text-emerald-600 text-xl"></i> Check Vendor Quote
+                    </h3>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Select Featured Item</label>
+                        <select id="checker-item-select" onchange="onCheckerItemChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <option value="">-- Choose item or tour --</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Vendor's Quote (in '000 VND)</label>
+                        <div class="relative">
+                            <input type="number" id="checker-price-input" placeholder="e.g. 150 for 150,000 ₫" oninput="calculateFairness()" class="w-full pl-4 pr-16 py-3 bg-slate-50 border border-slate-200 rounded-xl text-lg font-bold text-slate-900 focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">,000 ₫</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Tip: Input "50" for 50,000 VND (~$2.00 USD).</p>
+                    </div>
+
+                    <div id="benchmark-info" class="hidden bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-600">
+                        <span class="font-bold text-slate-700">Fair Benchmark Range:</span> 
+                        <span id="benchmark-range-text" class="font-bold text-emerald-700"></span>
+                    </div>
+
+                    <button onclick="calculateFairness()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+                        <i class="ph ph-lightning text-lg"></i> Evaluate Quote
+                    </button>
+                </div>
+
+                <div class="lg:col-span-6 space-y-4">
+                    <div id="checker-result-card" class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm min-h-[260px] flex flex-col justify-center items-center text-center">
+                        <div class="text-5xl mb-3">📸</div>
+                        <h4 class="font-bold text-lg text-slate-700">Ready to test vendor quote</h4>
+                        <p class="text-sm text-slate-500 max-w-xs mt-1">Select an item on the left and enter the asking price.</p>
+                    </div>
+
+                    <div id="checker-phrase-suggestion" class="hidden bg-amber-50 border border-amber-200 rounded-2xl p-4">
+                        <div class="flex items-start gap-3">
+                            <div class="bg-amber-500 text-white p-2 rounded-xl text-lg flex-shrink-0">
+                                🗣️
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-amber-900 text-sm">Polite Vietnamese Phrase</h5>
+                                <p id="phrase-suggestion-text" class="text-base font-extrabold text-amber-950 mt-1">"Bớt giá được không?"</p>
+                                <p id="phrase-phonetic-text" class="text-xs text-amber-800 italic mt-0.5">Pronounced: "Bot zah duok khong?"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: ESSENTIAL AUDIO PHRASES -->
+        <section id="tab-phrases" class="tab-content hidden space-y-6">
+            <div class="bg-gradient-to-r from-emerald-800 to-amber-700 text-white rounded-3xl p-6 md:p-8 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                    <span class="inline-block bg-white/20 px-3 py-1 rounded-full text-xs font-semibold mb-2">Speak Local</span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold">Bargaining & Dining Audio Flashcards</h2>
+                    <p class="text-emerald-100 text-sm mt-1 max-w-xl">
+                        Tap the audio icon to listen to accurate Vietnamese speech synthesis!
+                    </p>
+                </div>
+                <div class="text-6xl hidden md:block">🗣️</div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="phrases-grid">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
+        <!-- TAB 5: FRIENDLY TIPS -->
+        <section id="tab-tips" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 space-y-6">
+                <div>
+                    <span class="text-emerald-600 font-bold text-xs uppercase tracking-wider">Culture & Tourist Protection</span>
+                    <h2 class="text-2xl font-extrabold text-slate-800 mt-1">Shopping Etiquette & Smart Street Advice</h2>
+                    <p class="text-slate-600 text-sm mt-1">
+                        Practical steps to ensure respectful, pleasant, and fair transactions with local vendors.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-5 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-2">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-lg">
+                                ⚖️
+                            </div>
+                            <h3 class="font-bold text-slate-800">Live Seafood Weighing Inspection</h3>
+                        </div>
+                        <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
+                            In coastal destinations like Ha Long, Da Nang, and Nha Trang, ask to see live weighing before cooking. Clarify if the quoted rate includes cooking preparation charges ("Bao chế biến").
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-emerald-50/80 border border-emerald-200 space-y-2">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
+                                🌄
+                            </div>
+                            <h3 class="font-bold text-slate-800">Ethical Textile Buying in Sa Pa</h3>
+                        </div>
+                        <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
+                            Handmade indigo-dyed hemp textiles by Hmong & Dao artisans require weeks of work. Buy directly from artisans and support adults rather than encouraging children to skip school.
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-sky-50/80 border border-sky-200 space-y-2">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-sky-600 text-white flex items-center justify-center font-bold text-lg">
+                                🚲
+                            </div>
+                            <h3 class="font-bold text-slate-800">Cyclo & Ride Fare Agreement</h3>
+                        </div>
+                        <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
+                            Always explicitly agree whether a cyclo or motor-taxi quote is <strong>total price</strong> or <strong>per person / per hour</strong> BEFORE starting your ride.
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-rose-50/80 border border-rose-200 space-y-2">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center font-bold text-lg">
+                                🌅
+                            </div>
+                            <h3 class="font-bold text-slate-800">Morning First Customer ("Mở Hàng")</h3>
+                        </div>
+                        <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
+                            In Vietnamese market culture, the very first sale of the morning brings luck for the whole day. Be extra courteous when bargaining first thing in the morning!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: SAVED MARKET CHECKLIST -->
+        <section id="tab-saved" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-slate-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-slate-800">Your Saved Market Checklist</h2>
+                        <p class="text-slate-500 text-sm mt-0.5">Quick image & price reference while shopping outdoors.</p>
+                    </div>
+                    <button onclick="clearSavedItems()" class="text-xs text-rose-600 font-bold hover:underline">
+                        Clear Checklist
+                    </button>
+                </div>
+
+                <div id="saved-items-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+                    <!-- JS Populated -->
+                </div>
+
+                <div id="saved-empty-state" class="text-center py-12">
+                    <div class="text-4xl mb-2">🔖</div>
+                    <p class="font-bold text-slate-700">Your checklist is currently empty!</p>
+                    <p class="text-xs text-slate-400 mt-1">Click the bookmark icon on any photo card to save it here.</p>
+                    <button onclick="switchTab('catalog')" class="mt-4 px-4 py-2 bg-emerald-600 text-white font-bold text-xs rounded-xl shadow">
+                        Explore Photo Guide
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+            <div class="flex items-center justify-center gap-2 text-white font-bold text-base">
+                <span>VietFair</span>
+                <span class="bg-emerald-500/20 text-emerald-300 text-xs px-2 py-0.5 rounded-full border border-emerald-500/30">Community Tourist Price Guide</span>
+            </div>
+            <p class="max-w-md mx-auto text-slate-400">
+                Empowering tourists with accurate benchmark prices and real photo guides for pleasant transactions across Vietnam.
+            </p>
+            <p class="text-slate-500">© 2026 VietFair Project.</p>
+        </div>
+    </footer>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-notification" class="fixed bottom-20 md:bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none text-xs font-bold">
+        <span id="toast-icon" class="text-base">✨</span>
+        <span id="toast-msg">Action completed!</span>
+    </div>
+
+    <!-- Mobile Navigation Bar -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-2 py-2 flex justify-around items-center z-50 shadow-lg">
+        <button onclick="switchTab('catalog')" id="mob-nav-catalog" class="flex flex-col items-center gap-1 text-emerald-600 text-xs font-bold py-1 px-2">
+            <i class="ph ph-image text-xl"></i>
+            <span>Photos</span>
+        </button>
+        <button onclick="switchTab('spots')" id="mob-nav-spots" class="flex flex-col items-center gap-1 text-slate-500 text-xs font-medium py-1 px-2">
+            <i class="ph ph-map-pin text-xl"></i>
+            <span>Regions</span>
+        </button>
+        <button onclick="switchTab('checker')" id="mob-nav-checker" class="flex flex-col items-center gap-1 text-slate-500 text-xs font-medium py-1 px-2">
+            <i class="ph ph-calculator text-xl"></i>
+            <span>Haggle</span>
+        </button>
+        <button onclick="switchTab('phrases')" id="mob-nav-phrases" class="flex flex-col items-center gap-1 text-slate-500 text-xs font-medium py-1 px-2">
+            <i class="ph ph-chat-teardrop-text text-xl"></i>
+            <span>Phrases</span>
+        </button>
+        <button onclick="switchTab('tips')" id="mob-nav-tips" class="flex flex-col items-center gap-1 text-slate-500 text-xs font-medium py-1 px-2">
+            <i class="ph ph-shield-check text-xl"></i>
+            <span>Tips</span>
+        </button>
+    </div>
+
+    <script>
+        // Exchange baseline
+        const exchangeRates = {
+            USD: { rate: 25400, symbol: '$' },
+            EUR: { rate: 27500, symbol: '€' },
+            AUD: { rate: 16800, symbol: 'A$' },
+            GBP: { rate: 32200, symbol: '£' }
+        };
+        let currentCurrency = 'USD';
+
+        /* 
+          ==========================================================================
+          MANUAL IMAGE CONFIGURATION DATASET
+          Insert your image URLs into the `img` field for each item below.
+          Example: img: "https://your-domain.com/pho-bo.jpg"
+          Leave as "" (blank) to display the blank placeholder section.
+          ==========================================================================
+        */
+        const itemsData = [
+            {
+                id: 'pho-bo',
+                name: 'Phở Bò (Vietnamese Beef Noodle Soup)',
+                category: 'food',
+                img: 'https://scontent.fhan5-7.fna.fbcdn.net/v/t1.15752-9/843854908_1737474400663740_8391413780932963521_n.jpg?stp=dst-jpg_tt6&cstp=mx1020x1020&ctp=s1020x1020&_nc_cat=102&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeELjQU0JbFSJbzXw0TM33VDTXSJePy-O09NdIl4_L47T4ll7VrV-4xTJxF0UuLcDvwYlGiMbL7PcM3aNS8Qutj7&_nc_ohc=Nf9LQHNGxFkQ7kNvwFDugoh&_nc_oc=Ado7C-kA5Fh4qgZ51uaXqVXF-KPQdHxDQm2VrI7kI_ZcsbNYuKGQGGOcgdaRyrshcu-kzW-QHb8IN65U1g6fsUOC&_nc_zt=23&_nc_ht=scontent.fhan5-7.fna&_nc_ss=7b2a8&oh=03_Q7cD6gG0TfqKisy3RTTKsVSo_IC4Sv2QzWEcSqUl9HBzEyoLzQ&oe=6AF6EF05', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 40000,
+                maxVnd: 60000,
+                unit: 'per bowl',
+                hagglingPossible: false,
+                cities: ['hanoi', 'all'],
+                locationTag: 'Hanoi & Nationwide Stalls',
+                notes: 'Standard local street stall rate is 40k-50k ₫. Specialized beef brisket bowls in prime Old Quarter range 55k-70k ₫.',
+            },
+            {
+                id: 'banh-mi-pate',
+                name: 'Bánh Mì Paté (Classic Crispy Sandwich)',
+                category: 'food',
+                img: 'https://images.unsplash.com/photo-1788927731692-9bd4b4ae861a?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 20000,
+                maxVnd: 35000,
+                unit: 'per sandwich',
+                hagglingPossible: false,
+                cities: ['all'],
+                locationTag: 'Street Carts Nationwide',
+                notes: 'Sidewalk cart price is 20k-25k ₫. Famous tourist bakery spots (e.g. Banh Mi Phuong Hoi An or Huynh Hoa Saigon) range 35k-50k ₫.',
+            },
+            {
+                id: 'ca-phe-trung',
+                name: 'Cà Phê Trứng (Hanoi Creamy Egg Coffee)',
+                category: 'food',
+                img: 'https://images.unsplash.com/photo-1786631562844-ba5bb388f3e3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 30000,
+                maxVnd: 45000,
+                unit: 'per cup',
+                hagglingPossible: false,
+                cities: ['hanoi', 'haiphong'],
+                locationTag: 'Hanoi Old Quarter',
+                notes: 'Famous traditional cafes like Giang Coffee or Hidden Gem charge 30k-40k ₫ per cup.',
+            },
+            {
+                id: 'ca-phe-sua-da',
+                name: 'Cà Phê Sữa Đá (Iced Coffee with Sweet Milk)',
+                category: 'food',
+                img: 'https://images.unsplash.com/photo-1629688825560-917b9727c15b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 15000,
+                maxVnd: 30000,
+                unit: 'per glass',
+                hagglingPossible: false,
+                cities: ['hcmc', 'all'],
+                locationTag: 'Saigon Carts & Sidewalks',
+                notes: 'Street carts in Saigon charge 15k-25k ₫. Modern indoor coffee shops charge 35k-50k ₫.',
+            },
+            {
+                id: 'bun-cha',
+                name: 'Bún Chả Hà Nội (Grilled Pork & Rice Noodles)',
+                category: 'food',
+                img: 'https://scontent.fhan1-1.fna.fbcdn.net/v/t1.15752-9/849726055_2040242299989752_5479510220329482117_n.png?_nc_cat=109&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=fc17b8&_nc_ohc=toMVV_rxrucQ7kNvwGkmS_N&_nc_oc=Adq8M6OvS34knHNvTi_eYoCGUY3qT9G4xEAZXfDgm84w6x5iDisM2xVgLaXov_XsGb4&_nc_zt=23&_nc_ht=scontent.fhan1-1.fna&_nc_ss=7b6a8&oh=03_Q7cD6gFMdJ_e2WYldV8DX8kayNNWRwjmFfn-yWpFjiZWiYBA9g&oe=6AF88176', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 45000,
+                maxVnd: 65000,
+                unit: 'per set (incl. herbs)',
+                hagglingPossible: false,
+                cities: ['hanoi'],
+                locationTag: 'Hanoi Streets & Markets',
+                notes: 'Includes grilled pork patties in warm dipping sauce, fresh herbs, and rice vermicelli. Spring rolls extra (12k-15k ₫/piece).',
+            },
+            {
+                id: 'banh-xeo',
+                name: 'Bánh Xèo (Crisp Sizzling Rice Crepe)',
+                category: 'food',
+                img: 'https://cdn.tgdd.vn/2021/04/CookRecipe/GalleryStep/thanh-pham-1315.jpg', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 30000,
+                maxVnd: 60000,
+                unit: 'per large crepe',
+                hagglingPossible: false,
+                cities: ['danang', 'hoian', 'hcmc'],
+                locationTag: 'Central & Southern Cities',
+                notes: 'Central style small crepes are 15k-20k ₫ each. Southern style massive crepes with shrimp & pork are 45k-65k ₫.',
+            },
+            {
+                id: 'cha-ca-lang',
+                name: 'Chả Cá Lăng (Turmeric Fish Fillet with Dill)',
+                category: 'food',
+                img: 'https://cdn.tgdd.vn/Files/2020/04/14/1248880/cach-lam-cha-ca-la-vong-chuan-bi-ha-noi-ngay-tai-nha-202203041340429167.jpg', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 130000,
+                maxVnd: 180000,
+                unit: 'per portion',
+                hagglingPossible: false,
+                cities: ['hanoi', 'halong'],
+                locationTag: 'Hanoi & Ha Long Specialty',
+                notes: 'Sizzled at table with fresh dill, scallions, peanuts, and rice noodles. Specialized pan-fried fish eateries.',
+            },
+            {
+                id: 'banh-bot-loc',
+                name: 'Bánh Bột Lọc (Hue Tapioca Dumplings)',
+                category: 'food',
+                img: 'https://cdn.tgdd.vn/2021/10/CookDish/cach-lam-banh-bot-loc-la-chuoi-kieu-hue-dai-mem-trong-veo-cuc-avt-1200x676-1.jpg', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 35000,
+                maxVnd: 50000,
+                unit: 'per platter (10 pcs)',
+                hagglingPossible: false,
+                cities: ['hue', 'danang'],
+                locationTag: 'Hue Dong Ba Market',
+                notes: 'Chewy translucent tapioca dumplings stuffed with shrimp and pork wrapped in banana leaf.',
+            },
+            {
+                id: 'banh-mi-cay-haiphong',
+                name: 'Bánh Mì Cay (Hai Phong Spicy Breadstick)',
+                category: 'food',
+                img: 'https://cdn.tgdd.vn/2020/12/CookProduct/1260-1200x643-42.jpg', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 5000,
+                maxVnd: 8000,
+                unit: 'per breadstick',
+                hagglingPossible: false,
+                cities: ['haiphong'],
+                locationTag: 'Hai Phong Food Tour',
+                notes: 'Thin crispy breadstick filled with rich liver pate and chili sauce (Chí Chương). Locals order 10-15 sticks at once.',
+            },
+            {
+                id: 'dua-tuoi',
+                name: 'Fresh Coconut Water (Dừa Tươi)',
+                category: 'food',
+                img: 'https://hunufa.vn/wp-content/uploads/2025/09/dua-xiem-xanh-va-dua-xiem-do-loai-nao-ngon-3.webp', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 25000,
+                maxVnd: 40000,
+                unit: 'per chilled coconut',
+                hagglingPossible: true,
+                cities: ['all'],
+                locationTag: 'Beaches & Street Carts',
+                notes: 'Street stalls charge 25k-30k ₫. Beach lounger vendor asking price is often 50k ₫ (offer 35k ₫).',
+            },
+            {
+                id: 'ao-dai',
+                name: 'Áo Dài (Traditional Silk Dress)',
+                category: 'souvenir',
+                img: 'https://thekat.vn/wp-content/uploads/2023/08/DSC01881-scaled.jpg', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 350000,
+                maxVnd: 750000,
+                unit: 'per tailored / ready set',
+                hagglingPossible: true,
+                cities: ['hoian', 'hue', 'hanoi', 'hcmc'],
+                locationTag: 'Hoi An Ancient Town Tailors',
+                notes: 'Ready-made silk sets are 350k-500k ₫. Custom 24-hour tailored silk sets in Hoi An cost 700k-1.2M ₫.',
+            },
+            {
+                id: 'non-la',
+                name: 'Nón Lá (Conical Palm Hat)',
+                category: 'souvenir',
+                img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7BIF3WZxaRQZVGMivNeT4NKclzGmyP8TVNKFU6P8xFA&s=10', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 30000,
+                maxVnd: 60000,
+                unit: 'per hat',
+                hagglingPossible: true,
+                cities: ['all'],
+                locationTag: 'Markets Nationwide',
+                notes: 'Plain woven palm hat is 30k-40k ₫. Fine silk-embroidered versions cost 60k-90k ₫.',
+            },
+            {
+                id: 'halong-day-cruise',
+                name: 'Ha Long Bay Day Cruise Tour',
+                category: 'tours',
+                img: 'https://plus.unsplash.com/premium_photo-1719955781545-c60219441bfc?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 650000,
+                maxVnd: 950000,
+                unit: 'per person (incl. lunch)',
+                hagglingPossible: true,
+                cities: ['halong'],
+                locationTag: 'Ha Long & Tuan Chau Harbor',
+                notes: 'Covers Sung Sot Cave, Titov Island peak, buffet lunch & bamboo boat ride. Check harbor fee inclusion.',
+            },
+            {
+                id: 'cyclo-tour',
+                name: 'Cyclo Rickshaw Ride',
+                category: 'transport',
+                img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJuc7tRN_rPsrxxS--gKUYLvafc-JsuK9k8nKdb84N-A&s=10', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 100000,
+                maxVnd: 150000,
+                unit: 'per hour per person',
+                hagglingPossible: true,
+                cities: ['hanoi', 'hue', 'hoian', 'hcmc'],
+                locationTag: 'Hanoi Old Quarter & Hue Citadel',
+                notes: 'Standard fee is 100k-150k ₫/hour. Explicitly confirm total duration and price per person before sitting.',
+            },
+            {
+                id: 'xe-om-grab',
+                name: 'Motorbike Taxi (Xe Ôm / Grab Bike)',
+                category: 'transport',
+                img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyb7jNQ40aY37JQy-cuXJnIdLwHwHkfMFqf69tqm-fuQ&s=10', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 25000,
+                maxVnd: 50000,
+                unit: 'per 3-5 km ride',
+                hagglingPossible: true,
+                cities: ['all'],
+                locationTag: 'City Rides',
+                notes: 'App-based rides (Grab/Xanh SM) cost ~25k-35k ₫ for 3 km. Traditional street drivers should match app pricing.',
+            },
+            {
+                id: 'sim-card',
+                name: '4G Tourist Unlimited SIM Card',
+                category: 'essential',
+                img: 'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQWu5X-N8OBJMdE16gvImAGBZ2EXE3-n62NMO3l790LDwdpJRmqg6q9ac9JSWK1Hj7S7WcrozvuHHmCk_MwdQtmjdycUJ10tZdwX-xpJ2OdQmyILlXApS6nLJUwd01EFnpIHgmL8Ah52Eg&usqp=CAc', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 180000,
+                maxVnd: 280000,
+                unit: '30-day package',
+                hagglingPossible: false,
+                cities: ['all'],
+                locationTag: 'Airports & Telecom Outlets',
+                notes: 'Official Viettel/Vinaphone stores cost 180k-250k ₫. Airport arrival booths charge 280k-350k ₫.',
+            },
+            {
+                id: 'mu-bao-hiem',
+                name: 'Standard Scooter Helmet',
+                category: 'essential',
+                img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRL-K-4Ot3BEwqjvdmCFVpuOzqBzw7GVS2INyNJoFHxeg&s=10', // PASTE YOUR IMAGE LINK HERE
+                minVnd: 80000,
+                maxVnd: 150000,
+                unit: 'per helmet',
+                hagglingPossible: true,
+                cities: ['all'],
+                locationTag: 'Roadside Shops',
+                notes: 'Basic half-face helmet with visor costs 80k-120k ₫. Heavy duty full-face helmets cost 250k-400k ₫.',
+            }
+        ];
+
+        // Regional Guides
+        const spotGuides = [
+            {
+                id: 'hanoi',
+                name: 'Hanoi Old Quarter',
+                region: 'Capital Region',
+                bg: 'bg-emerald-800',
+                badge: 'Street Food & Coffee',
+                markup: '1.3x - 1.8x in tourist alleys',
+                tips: [
+                    'Egg coffee at original shops (Giang, Nhan) is strictly 30k - 40k ₫.',
+                    'Pho in Old Quarter ranges 40k - 60k ₫. Avoid unpriced sidewalk seats near Hoan Kiem lake.',
+                    'Bargain politely for souvenirs around weekend Dong Xuan night market.'
+                ]
+            },
+            {
+                id: 'halong',
+                name: 'Ha Long Bay & Tuan Chau',
+                region: 'North Coast',
+                bg: 'bg-teal-800',
+                badge: 'Boat Cruises & Seafood',
+                markup: '1.5x - 2.5x on floating stalls',
+                tips: [
+                    'Standard 1-day cruise ticket should cover 290k ₫ harbor entry & lunch.',
+                    'Request live seafood weighing in front of you at Tuan Chau / Hon Gai harbors.',
+                    'Kayaking / Bamboo boat fee is 100k - 150k ₫/person per hour.'
+                ]
+            },
+            {
+                id: 'sapa',
+                name: 'Sa Pa & Fansipan',
+                region: 'Northwest Mountains',
+                bg: 'bg-amber-800',
+                badge: 'Trekking & Crafts',
+                markup: '1.3x - 2x on textiles',
+                tips: [
+                    'Handmade indigo hemp textiles cost 200k - 400k ₫. Factory prints cost 50k - 90k ₫.',
+                    'Independent local Hmong guide day fee is 350k - 500k ₫.',
+                    'Fansipan cable car tickets are fixed price (850k ₫ adult).'
+                ]
+            },
+            {
+                id: 'haiphong',
+                name: 'Hai Phong City',
+                region: 'Coastal North',
+                bg: 'bg-rose-800',
+                badge: 'Food Tour Destination',
+                markup: 'Low (Local fair rates)',
+                tips: [
+                    'Banh Da Cua (Crab noodles) is 40k - 50k ₫ per full bowl.',
+                    'Spicy breadsticks (Banh Mi Cay) cost 5k - 8k ₫ per stick.',
+                    'Coconut slush coffee (Ca Phe Cot Dua) is 25k - 35k ₫.'
+                ]
+            },
+            {
+                id: 'hue',
+                name: 'Hue Imperial Capital',
+                region: 'Central Vietnam',
+                bg: 'bg-yellow-800',
+                badge: 'Heritage & Delicacies',
+                markup: 'Low - Medium (1.2x - 1.5x)',
+                tips: [
+                    'Bun Bo Hue in local wards costs 35k - 50k ₫.',
+                    'Citadel Cyclo hourly rate is 100k - 120k ₫ per person.',
+                    'Perfume River dragon boat folk music ride is 100k - 150k ₫.'
+                ]
+            },
+            {
+                id: 'hoian',
+                name: 'Hoi An Ancient Town',
+                region: 'Central Coast',
+                bg: 'bg-amber-700',
+                badge: 'Tailors & Lanterns',
+                markup: '1.5x - 3x inside old town',
+                tips: [
+                    'Foldable silk lanterns cost 40k - 70k ₫ after light bargaining.',
+                    'Compare fabric weight at 2-3 tailors before placing 24-hour suit/dress deposits.',
+                    'Night market Cao Lau noodle bowls cost 35k - 50k ₫.'
+                ]
+            }
+        ];
+
+        const phrasesData = [
+            { vn: 'Bao nhiêu tiền?', phonetic: 'Bow nyew tyen?', en: 'How much is this?', icon: '🏷️' },
+            { vn: 'Bớt giá được không?', phonetic: 'Bot zah duok khong?', en: 'Can you give a discount?', icon: '🤝' },
+            { vn: 'Mắc (Đắt) quá!', phonetic: 'Mak / Dat kwah!', en: 'Too expensive!', icon: '😮' },
+            { vn: 'Cho tôi cân thử', phonetic: 'Cho toy kun too', en: 'Please weigh this for me', icon: '⚖️' },
+            { vn: 'Cảm ơn, tôi chỉ xem thôi', phonetic: 'Kam un, toy chee sem toy', en: 'Thank you, I am just looking', icon: '👀' },
+            { vn: 'Tính tiền giùm tôi', phonetic: 'Tin tyen zume toy', en: 'The bill, please', icon: '💵' }
+        ];
+
+        let savedItems = JSON.parse(localStorage.getItem('vietfair_saved') || '[]');
+        let currentCategory = 'all';
+
+        // Initialize App on Window Load
+        window.onload = function() {
+            renderSpotGuides();
+            renderProductCatalog();
+            populateCheckerDropdown();
+            renderPhrases();
+            updateSavedBadge();
+            renderSavedItems();
+        };
+
+        function changeCurrency() {
+            currentCurrency = document.getElementById('currency-select').value;
+            renderProductCatalog();
+            onCheckerItemChange();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            const hero = document.getElementById('hero-section');
+            if (tabId === 'catalog' || tabId === 'spots') {
+                hero.classList.remove('hidden');
+            } else {
+                hero.classList.add('hidden');
+            }
+
+            const navIds = ['catalog', 'spots', 'checker', 'phrases', 'tips', 'saved'];
+            navIds.forEach(id => {
+                const btn = document.getElementById(`nav-${id}`);
+                const mobBtn = document.getElementById(`mob-nav-${id}`);
+                if (btn) {
+                    if (id === tabId) {
+                        btn.className = "px-3.5 py-2 rounded-xl text-emerald-800 bg-emerald-50 font-bold transition-all border border-emerald-200/50";
+                    } else {
+                        btn.className = "px-3.5 py-2 rounded-xl text-slate-600 hover:text-emerald-700 hover:bg-slate-100 font-medium transition-all";
+                    }
+                }
+                if (mobBtn) {
+                    if (id === tabId) {
+                        mobBtn.className = "flex flex-col items-center gap-1 text-emerald-600 text-xs font-bold py-1 px-2";
+                    } else {
+                        mobBtn.className = "flex flex-col items-center gap-1 text-slate-500 text-xs font-medium py-1 px-2";
+                    }
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = "cat-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap border bg-emerald-600 text-white border-emerald-600 shadow-sm";
+                } else {
+                    btn.className = "cat-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap border bg-white text-slate-600 border-slate-200 hover:bg-slate-100";
+                }
+            });
+            filterItems();
+        }
+
+        function filterItems() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const location = document.getElementById('location-select').value;
+
+            const filtered = itemsData.filter(item => {
+                const matchesCat = (currentCategory === 'all' || item.category === currentCategory);
+                const matchesQuery = item.name.toLowerCase().includes(query) || (item.notes && item.notes.toLowerCase().includes(query));
+                const matchesLoc = (location === 'all' || item.cities.includes('all') || item.cities.includes(location));
+                return matchesCat && matchesQuery && matchesLoc;
+            });
+
+            renderProductGrid(filtered);
+        }
+
+        function renderProductCatalog() {
+            filterItems();
+        }
+
+        function convertFromVnd(vndAmount) {
+            const curr = exchangeRates[currentCurrency];
+            return `${curr.symbol}${(vndAmount / curr.rate).toFixed(2)}`;
+        }
+
+        function formatVnd(amount) {
+            return new Intl.NumberFormat('vi-VN').format(amount);
+        }
+
+        function renderProductGrid(items) {
+            const grid = document.getElementById('product-grid');
+            const noRes = document.getElementById('no-results');
+
+            if (items.length === 0) {
+                grid.innerHTML = '';
+                noRes.classList.remove('hidden');
+                return;
+            }
+
+            noRes.classList.add('hidden');
+            grid.innerHTML = items.map(item => {
+                const minCurr = convertFromVnd(item.minVnd);
+                const maxCurr = convertFromVnd(item.maxVnd);
+                const isSaved = savedItems.includes(item.id);
+
+                // Render real image or clean blank placeholder frame
+                const imageTag = item.img && item.img.trim() !== ""
+                    ? `<img src="${item.img}" alt="${item.name}" loading="lazy" onError="this.onerror=null;this.parentElement.innerHTML='<div class=\'w-full h-full flex flex-col items-center justify-center bg-slate-100 text-slate-400 text-xs font-bold\'>Broken image link</div>';" class="img-card-zoom w-full h-full object-cover">`
+                    : `<div class="w-full h-full flex flex-col items-center justify-center bg-slate-100/80 border-b border-slate-200 text-slate-400 p-4 text-center">
+                         <div class="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-slate-400 shadow-sm mb-1.5">
+                             <i class="ph ph-image text-2xl"></i>
+                         </div>
+                         <span class="text-xs font-bold text-slate-500">Image Slot (Blank)</span>
+                         <span class="text-[10px] text-slate-400 mt-0.5 font-mono bg-white/80 px-2 py-0.5 rounded border border-slate-200">img: "${item.id}" in code</span>
+                       </div>`;
+
+                return `
+                    <div class="card-container bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col justify-between relative group">
+                        <div>
+                            <!-- Image Frame Container -->
+                            <div class="relative h-52 w-full overflow-hidden bg-slate-100">
+                                ${imageTag}
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+                                
+                                <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-slate-800 text-[11px] font-extrabold px-2.5 py-1 rounded-lg shadow-sm flex items-center gap-1">
+                                    📍 ${item.locationTag || 'Vietnam'}
+                                </span>
+
+                                <div class="absolute top-3 right-3 flex items-center gap-1.5">
+                                    <button onclick="toggleSaveItem('${item.id}')" title="Bookmark item" class="w-9 h-9 rounded-full bg-white/90 backdrop-blur-md text-slate-700 hover:text-amber-500 flex items-center justify-center transition-all shadow-md">
+                                        <i class="${isSaved ? 'ph-fill ph-bookmark text-amber-500' : 'ph ph-bookmark'} text-base"></i>
+                                    </button>
+                                </div>
+
+                                <div class="absolute bottom-3 left-3 right-3 text-white">
+                                    <h3 class="font-extrabold text-base leading-snug drop-shadow-md">${item.name}</h3>
+                                </div>
+                            </div>
+
+                            <div class="p-5">
+                                <div class="bg-emerald-50/80 border border-emerald-200/80 rounded-2xl p-3.5 mb-3">
+                                    <div class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider mb-0.5">Fair Local Benchmark</div>
+                                    <div class="text-xl font-extrabold text-emerald-950">
+                                        ${formatVnd(item.minVnd)} – ${formatVnd(item.maxVnd)} ₫
+                                    </div>
+                                    <div class="text-xs font-semibold text-emerald-700 mt-0.5">
+                                        ≈ ${minCurr} – ${maxCurr} ${currentCurrency} (${item.unit || 'per item'})
+                                    </div>
+                                </div>
+
+                                <p class="text-xs text-slate-600 leading-relaxed my-2">
+                                    ${item.notes || 'Fair benchmark pricing guide.'}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="px-5 pb-5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                            <span class="inline-flex items-center gap-1 font-semibold ${item.hagglingPossible ? 'text-amber-800 bg-amber-50' : 'text-slate-600 bg-slate-100'} px-2.5 py-1 rounded-lg">
+                                ${item.hagglingPossible ? '🤝 Friendly Haggle' : '🏷️ Fixed Price'}
+                            </span>
+                            <button onclick="openCheckerWithItem('${item.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl shadow transition-all flex items-center gap-1">
+                                Haggle This <i class="ph ph-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast-notification');
+            const msgEl = document.getElementById('toast-msg');
+            const iconEl = document.getElementById('toast-icon');
+
+            msgEl.innerText = message;
+            iconEl.innerText = type === 'success' ? '✅' : 'ℹ️';
+
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+
+        function renderSpotGuides() {
+            const filterVal = document.getElementById('spot-filter-select').value;
+            const container = document.getElementById('spots-grid');
+
+            const filteredSpots = spotGuides.filter(s => filterVal === 'all' || s.id === filterVal);
+
+            container.innerHTML = filteredSpots.map(spot => `
+                <div class="border border-slate-200/90 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all bg-white flex flex-col justify-between">
+                    <div>
+                        <div class="${spot.bg} text-white p-5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs uppercase font-extrabold tracking-wider bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full">${spot.region}</span>
+                                <span class="text-xs font-bold bg-amber-400 text-slate-900 px-2 py-0.5 rounded-full">${spot.badge}</span>
+                            </div>
+                            <h3 class="text-2xl font-extrabold mt-2">${spot.name}</h3>
+                        </div>
+
+                        <div class="p-5 space-y-3 text-xs md:text-sm text-slate-700">
+                            <div class="flex items-start gap-2 text-xs">
+                                <i class="ph ph-chart-line-up text-amber-600 font-bold text-base mt-0.5"></i>
+                                <p><strong>Typical Tourist Markup:</strong> ${spot.markup}</p>
+                            </div>
+
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-2 text-xs mt-3">
+                                <div class="font-bold text-slate-800 uppercase tracking-wider text-[11px] text-emerald-700">Essential Regional Tips</div>
+                                <ul class="space-y-1.5 text-slate-600 leading-relaxed">
+                                    ${spot.tips.map(t => `<li class="flex items-start gap-1.5"><span class="text-emerald-600 font-bold">•</span> <span>${t}</span></li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <button onclick="filterBySpot('${spot.id}')" class="text-emerald-700 font-bold hover:underline flex items-center gap-1">
+                            <i class="ph ph-image"></i> View Items in ${spot.name}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterBySpot(spotId) {
+            switchTab('catalog');
+            document.getElementById('location-select').value = spotId;
+            filterItems();
+        }
+
+        function populateCheckerDropdown() {
+            const select = document.getElementById('checker-item-select');
+            select.innerHTML = '<option value="">-- Choose item or tour --</option>' + 
+                itemsData.map(item => `<option value="${item.id}">${item.name}</option>`).join('');
+        }
+
+        function openCheckerWithItem(itemId) {
+            switchTab('checker');
+            const select = document.getElementById('checker-item-select');
+            select.value = itemId;
+            onCheckerItemChange();
+        }
+
+        function onCheckerItemChange() {
+            const itemId = document.getElementById('checker-item-select').value;
+            const infoBox = document.getElementById('benchmark-info');
+            const rangeText = document.getElementById('benchmark-range-text');
+
+            if (!itemId) {
+                infoBox.classList.add('hidden');
+                return;
+            }
+
+            const item = itemsData.find(i => i.id === itemId);
+            if (item) {
+                infoBox.classList.remove('hidden');
+                rangeText.innerText = `${formatVnd(item.minVnd)} ₫ – ${formatVnd(item.maxVnd)} ₫ (~${convertFromVnd(item.minVnd)} - ${convertFromVnd(item.maxVnd)} ${currentCurrency})`;
+                calculateFairness();
+            }
+        }
+
+        function calculateFairness() {
+            const itemId = document.getElementById('checker-item-select').value;
+            const inputVal = parseFloat(document.getElementById('checker-price-input').value);
+            const resultCard = document.getElementById('checker-result-card');
+            const phraseBox = document.getElementById('checker-phrase-suggestion');
+
+            if (!inputVal || inputVal <= 0) {
+                resultCard.innerHTML = `
+                    <div class="text-4xl mb-2">📸</div>
+                    <h4 class="font-bold text-slate-700 text-base">Input Vendor Quote</h4>
+                    <p class="text-xs text-slate-500 mt-1">Enter price quote in thousands (e.g. 150 for 150,000 VND).</p>
+                `;
+                phraseBox.classList.add('hidden');
+                return;
+            }
+
+            const vendorPrice = inputVal * 1000;
+            const currDisplay = convertFromVnd(vendorPrice);
+
+            let minPrice = 40000;
+            let maxPrice = 80000;
+
+            if (itemId) {
+                const item = itemsData.find(i => i.id === itemId);
+                if (item) {
+                    minPrice = item.minVnd;
+                    maxPrice = item.maxVnd;
+                }
+            }
+
+            const fairMid = (minPrice + maxPrice) / 2;
+            const ratio = vendorPrice / fairMid;
+
+            phraseBox.classList.remove('hidden');
+
+            if (vendorPrice <= maxPrice) {
+                resultCard.className = "bg-emerald-50 border-2 border-emerald-300 p-6 rounded-3xl shadow-sm flex flex-col justify-center items-center text-center text-emerald-950";
+                resultCard.innerHTML = `
+                    <div class="w-14 h-14 bg-emerald-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-2 shadow-md">
+                        🟢
+                    </div>
+                    <span class="bg-emerald-200 text-emerald-900 font-extrabold text-xs px-3 py-1 rounded-full uppercase tracking-wider mb-1">Honest Fair Price!</span>
+                    <h4 class="text-xl font-extrabold text-emerald-900 mt-1">${formatVnd(vendorPrice)} ₫ (~${currDisplay} ${currentCurrency})</h4>
+                    <p class="text-xs md:text-sm text-emerald-800 mt-2 max-w-sm leading-relaxed">
+                        This is a genuine local rate. Perfect to accept with a smile!
+                    </p>
+                `;
+                document.getElementById('phrase-suggestion-text').innerText = '"Cảm ơn bạn!" (Thank you!)';
+                document.getElementById('phrase-phonetic-text').innerText = 'Pronounced: "Kam un ban!"';
+
+            } else if (ratio <= 1.6) {
+                const recommendedOffer = Math.round((minPrice + maxPrice) / 20000) * 10000;
+                resultCard.className = "bg-amber-50 border-2 border-amber-300 p-6 rounded-3xl shadow-sm flex flex-col justify-center items-center text-center text-amber-950";
+                resultCard.innerHTML = `
+                    <div class="w-14 h-14 bg-amber-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-2 shadow-md">
+                        🟡
+                    </div>
+                    <span class="bg-amber-200 text-amber-900 font-extrabold text-xs px-3 py-1 rounded-full uppercase tracking-wider mb-1">Slight Tourist Markup</span>
+                    <h4 class="text-xl font-extrabold text-amber-900 mt-1">${formatVnd(vendorPrice)} ₫ (~${currDisplay} ${currentCurrency})</h4>
+                    <p class="text-xs md:text-sm text-amber-800 mt-2 max-w-sm leading-relaxed">
+                        A little bit high. Friendly counter-offer: <strong>${formatVnd(recommendedOffer)} ₫</strong> (~${convertFromVnd(recommendedOffer)} ${currentCurrency}).
+                    </p>
+                `;
+                document.getElementById('phrase-suggestion-text').innerText = `"${formatVnd(recommendedOffer / 1000)}k được không bạn?" (${formatVnd(recommendedOffer/1000)}k, okay?)`;
+                document.getElementById('phrase-phonetic-text').innerText = `Offer ${formatVnd(recommendedOffer)} VND politely.`;
+
+            } else {
+                const targetOffer = Math.round(maxPrice / 10000) * 10000;
+                resultCard.className = "bg-rose-50 border-2 border-rose-300 p-6 rounded-3xl shadow-sm flex flex-col justify-center items-center text-center text-rose-950";
+                resultCard.innerHTML = `
+                    <div class="w-14 h-14 bg-rose-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-2 shadow-md">
+                        🔴
+                    </div>
+                    <span class="bg-rose-200 text-rose-900 font-extrabold text-xs px-3 py-1 rounded-full uppercase tracking-wider mb-1">Overpriced Quote</span>
+                    <h4 class="text-xl font-extrabold text-rose-900 mt-1">${formatVnd(vendorPrice)} ₫ (~${currDisplay} ${currentCurrency})</h4>
+                    <p class="text-xs md:text-sm text-rose-800 mt-2 max-w-sm leading-relaxed">
+                        High quote. Negotiate down towards <strong>${formatVnd(targetOffer)} ₫</strong> or walk away politely to find another stall.
+                    </p>
+                `;
+                document.getElementById('phrase-suggestion-text').innerText = '"Bớt giá cho mình nhé!" (Please give me a discount!)';
+                document.getElementById('phrase-phonetic-text').innerText = 'Pronounced: "Bot zah cho meenh nye!"';
+            }
+        }
+
+        function renderPhrases() {
+            const container = document.getElementById('phrases-grid');
+            container.innerHTML = phrasesData.map(p => `
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between hover:border-emerald-300 transition-all">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-2xl">${p.icon}</span>
+                            <button onclick="speakPhrase('${p.vn}')" class="w-9 h-9 rounded-full bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-all shadow-sm">
+                                <i class="ph ph-speaker-high text-lg"></i>
+                            </button>
+                        </div>
+                        <h4 class="font-extrabold text-slate-800 text-lg">${p.vn}</h4>
+                        <p class="text-xs text-emerald-700 italic font-semibold mt-0.5">${p.phonetic}</p>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-3 font-medium pt-2 border-t border-slate-100">
+                        "${p.en}"
+                    </p>
+                </div>
+            `).join('');
+        }
+
+        function speakPhrase(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'vi-VN';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function toggleSaveItem(id) {
+            if (savedItems.includes(id)) {
+                savedItems = savedItems.filter(i => i !== id);
+            } else {
+                savedItems.push(id);
+            }
+            localStorage.setItem('vietfair_saved', JSON.stringify(savedItems));
+            updateSavedBadge();
+            renderProductCatalog();
+            renderSavedItems();
+        }
+
+        function updateSavedBadge() {
+            document.getElementById('saved-badge').innerText = savedItems.length;
+        }
+
+        function renderSavedItems() {
+            const container = document.getElementById('saved-items-container');
+            const emptyState = document.getElementById('saved-empty-state');
+
+            if (savedItems.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            const items = itemsData.filter(i => savedItems.includes(i.id));
+
+            container.innerHTML = items.map(item => `
+                <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-slate-200 flex items-center justify-center overflow-hidden flex-shrink-0">
+                            ${item.img && item.img.trim() !== '' 
+                                ? `<img src="${item.img}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover">`
+                                : `<i class="ph ph-image text-slate-400 text-xl"></i>`}
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-xs sm:text-sm line-clamp-1">${item.name}</h4>
+                            <p class="text-xs text-emerald-700 font-bold">${formatVnd(item.minVnd)} – ${formatVnd(item.maxVnd)} ₫</p>
+                            <span class="text-[10px] text-slate-400">📍 ${item.locationTag || 'Vietnam'}</span>
+                        </div>
+                    </div>
+                    <button onclick="toggleSaveItem('${item.id}')" class="text-slate-400 hover:text-rose-600 p-2">
+                        <i class="ph ph-trash text-lg"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function clearSavedItems() {
+            savedItems = [];
+            localStorage.setItem('vietfair_saved', JSON.stringify(savedItems));
+            updateSavedBadge();
+            renderProductCatalog();
+            renderSavedItems();
+        }
+    </script>
+</body>
+</html>
